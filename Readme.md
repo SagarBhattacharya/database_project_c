@@ -5,6 +5,4 @@ This is meant for educational purposes and is not to be used in an way that viol
 
 original blog : 
 
-[text][def Let's Build a Simple Database]
-
 [Let's Build a Simple Database]: https://cstack.github.io/db_tutorial/
