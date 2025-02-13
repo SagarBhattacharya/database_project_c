@@ -10,14 +10,39 @@ command_result execute_meta_command(input_buffer* buf, table* tbl){
   }
 }
 
+static txn_result insert_transaction(input_buffer* buf, statement* stm){
+  stm->type = STMT_INSERT;
+
+  char* keyword = strtok(buf->buffer, " ");
+  char* id_string = strtok(NULL, " ");
+  char* username = strtok(NULL, " ");
+  char* email = strtok(NULL, " ");
+
+  if(id_string == NULL || username == NULL || email == NULL){
+    return TXN_SYNTAX_ERR;
+  }
+
+  int id = strtol(id_string, NULL, 10);
+  if(id < 0){
+    return TXN_NEGATIVE_ID;
+  }
+
+  if(strlen(username) > USERNAME_MAX_LEN){
+    return TXN_STRING_TOO_LONG;
+  }
+  if(strlen(email) > EMAIL_MAX_LEN){
+    return TXN_STRING_TOO_LONG;
+  }
+
+  stm->row.id = id;
+  strcpy(stm->row.username, username);
+  strcpy(stm->row.email, email);
+  return TXN_SUCCESS;
+}
+
 txn_result transaction(input_buffer* buf, statement* stm){
   if(compare(buf->buffer, "insert")){
-    stm->type = STMT_INSERT;
-    int args_assigned = sscanf(buf->buffer, "insert %u %s %s", &(stm->row.id), stm->row.username, stm->row.email);
-    if(args_assigned < 3) {
-      return TXN_SYNTAX_ERR;
-    }
-    return TXN_SUCCESS;
+    return insert_transaction(buf, stm);
   }else if(compare(buf->buffer, "select")){
     stm->type = STMT_SELECT;
     return TXN_SUCCESS;

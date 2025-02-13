@@ -5,10 +5,13 @@
 
 // FIELD REPRESENTATION
 
+#define USERNAME_MAX_LEN 32
+#define EMAIL_MAX_LEN 256
+
 typedef struct field_t {
   u32 id;
-  char username[32];
-  char email[256];
+  char username[USERNAME_MAX_LEN];
+  char email[EMAIL_MAX_LEN];
 } field;
 
 void field_print(field* row);

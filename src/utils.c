@@ -3,8 +3,8 @@
 // creates a new input_buffer object
 input_buffer* input_buffer_new(){
   input_buffer* buf = (input_buffer*) malloc(sizeof(input_buffer));
-  buf->buffer = (char*) calloc(256, sizeof(char));
-  buf->buffer_length = 256;
+  buf->buffer = (char*) calloc(512, sizeof(char));
+  buf->buffer_length = 512;
   buf->input_length = 0;
   return buf;
 }

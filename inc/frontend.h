@@ -23,6 +23,8 @@ typedef enum txn_result_t {
   TXN_SUCCESS,
   TXN_UNRECOGNISED,
   TXN_SYNTAX_ERR,
+  TXN_STRING_TOO_LONG,
+  TXN_NEGATIVE_ID,
 } txn_result;
 
 typedef enum statement_type_t {

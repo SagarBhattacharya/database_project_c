@@ -20,6 +20,12 @@ i32 main(){
     statement stm;
     switch( transaction(buf, &stm)) {
       case TXN_SUCCESS: break;
+      case TXN_STRING_TOO_LONG:
+        printf("[ERROR] String is too long\n");
+        continue;
+      case TXN_NEGATIVE_ID:
+        printf("[ERROR] Id must be a positive value\n");
+        continue;
       case TXN_SYNTAX_ERR:
         fprintf(stderr, "[ERROR] Syntax Error, could not parse statement\n");
         continue;
