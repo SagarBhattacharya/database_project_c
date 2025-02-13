@@ -1,15 +1,8 @@
 #ifndef DATABASE_UTILS_H
 #define DATABASE_UTILS_H
 
-#include <stdint.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <stddef.h>
-#include <stdbool.h>
-#include <string.h>
-
-typedef size_t usize;
-typedef int32_t i32;
+#include "common.h"
+#include "table.h"
 
 typedef struct input_buffer_t {
   char* buffer;
@@ -19,9 +12,12 @@ typedef struct input_buffer_t {
 
 input_buffer* input_buffer_new();
 void input_buffer_close(input_buffer* buf);
-
 void print_prompt();
-void read_input(input_buffer* buf);
 
+// This function can possibly fail and exit - cleans up  
+// memory of input_buffer and table before exit
+void read_input(input_buffer* buf, table* tbl);
+
+bool compare(char* master, char* slave);
 
 #endif
