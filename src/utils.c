@@ -29,7 +29,7 @@ void read_input(input_buffer* buf, table* tbl){
   char* bytes_read = fgets(buf->buffer, buf->buffer_length, stdin);
   if(bytes_read == NULL){
     fprintf(stderr, "[ERROR] reading input failed \n");
-    table_dispose(tbl);
+    db_close(tbl);
     input_buffer_close(buf);
     exit(EXIT_FAILURE);
   }

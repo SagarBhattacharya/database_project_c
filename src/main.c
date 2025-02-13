@@ -1,7 +1,12 @@
 #include "../inc/frontend.h"
 
-i32 main(){
-  table* tbl = table_new();
+i32 main(i32 argc, char* argv[]){
+  if(argc < 2){
+    printf("[ERROR] No database specified\n");
+    exit(EXIT_FAILURE);
+  }
+  
+  table* tbl = db_open(argv[1]);
   input_buffer* buf = input_buffer_new();
 
   while(true){

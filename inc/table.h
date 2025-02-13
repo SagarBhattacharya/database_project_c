@@ -20,17 +20,23 @@ void field_print(field* row);
 
 #define MAX_PAGES_COUNT 100
 #define MAX_ROWS_PER_PAGE 15
-#define PAGE_SIZE (15 * sizeof(field))
+#define PAGE_SIZE (MAX_ROWS_PER_PAGE * sizeof(field))
+
+typedef struct pager_t {
+  FILE* file;
+  u32 file_length;
+  field* pages[MAX_PAGES_COUNT];
+} pager;
+
+pager* pager_open(const char* filename);
 
 typedef struct table_t {
-  field* pages;
-  u8 page_row_count;
-  u8 page_offset;
+  pager* pgr;
+  u8 row_count;
 } table;
 
-table* table_new();
-field* table_get(table* tbl, u32 row_index);
-void table_insert(table* tbl, field* row);
-void table_dispose(table* tbl);
+table* db_open(const char* filename);
+field* db_reference(table* tbl, u32 row_index);
+void db_close(table* tbl);
 
 #endif

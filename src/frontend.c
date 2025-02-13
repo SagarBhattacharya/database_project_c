@@ -3,7 +3,7 @@
 command_result execute_meta_command(input_buffer* buf, table* tbl){
   if(strcmp(buf->buffer, ".exit") == 0){
     input_buffer_close(buf);
-    table_dispose(tbl);
+    db_close(tbl);
     exit(EXIT_SUCCESS);
   }else {
     return CMD_UNRECOGNIZED;
@@ -51,17 +51,19 @@ txn_result transaction(input_buffer* buf, statement* stm){
 }
 
 static execute_result execute_insert_transaction(statement* stmt, table* tbl){
-  if(tbl->page_offset == MAX_PAGES_COUNT - 1 && tbl->page_row_count == MAX_ROWS_PER_PAGE - 1){
+  if(tbl->row_count >= MAX_PAGES_COUNT * MAX_ROWS_PER_PAGE){
     return EXEC_TABLEFULL;
   }
-  table_insert(tbl, &(stmt->row));
+  field* ref = db_reference(tbl, tbl->row_count);
+  *ref = stmt->row;
+  tbl->row_count++;
   return EXEC_SUCCESS;
 }
 
 static execute_result execute_select_transaction(statement* stmt, table* tbl){
-  u32 row_count = tbl->page_offset * MAX_ROWS_PER_PAGE + tbl->page_row_count;
-  for(u32 i = 0; i < row_count; i++){
-    field_print(table_get(tbl, i));
+  for(u32 i = 0; i < tbl->row_count; i++){
+    field* ref = db_reference(tbl, i);
+    field_print(ref);
   }
   return EXEC_SUCCESS;
 }
